@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const plm = require("passport-local-mongoose");
 
 mongoose.connect("mongodb://localhost:27017/Pinterest");
 
@@ -30,6 +31,8 @@ const userSchema = new mongoose.Schema({
     type: String,
   },
 });
+
+userSchema.plugin(plm);
 
 const User = mongoose.model("User", userSchema);
 
