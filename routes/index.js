@@ -1,12 +1,11 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 const userModel = require("./users");
 const passport = require("passport");
 
 const localStrategy = require("passport-local");
-passport.authenticate(new localStrategy(userModel.authenticate()));
+passport.use(new localStrategy(userModel.authenticate()));
 
-/* GET home page. */
 router.get("/", function (req, res, next) {
   res.render("index", { title: "Express" });
 });
@@ -16,31 +15,33 @@ router.get("/profile", isLoggedIn, function (req, res, next) {
 });
 
 router.post("/register", function (req, res) {
-  const { username, email, fullName } = req.body;
-  const userData = new userModel({ username, email, fullName });
+  const { username, email, fullName, password } = req.body;
 
-  userModel.register(userData, req.body.password).then(function () {
+  const newUser = new userModel({ username, email, fullName });
+
+  userModel.register(newUser, password, function (err, user) {
+    if (err) {
+      console.error(err);
+      return res.redirect("/"); // Redirect to home page on registration error
+    }
+    // After successful registration, authenticate the user and redirect to the profile page
     passport.authenticate("local")(req, res, function () {
       res.redirect("/profile");
     });
   });
 });
+
 router.post(
   "/login",
   passport.authenticate("local", {
     successRedirect: "/profile",
     failureRedirect: "/",
-  }),
-  function (req, res) {}
+  })
 );
 
 router.get("/logout", function (req, res) {
-  req.logout(function (err) {
-    if (err) {
-      return next(err);
-    }
-    res.redirect("/");
-  });
+  req.logout();
+  res.redirect("/");
 });
 
 function isLoggedIn(req, res, next) {
