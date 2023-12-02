@@ -11,18 +11,18 @@ html(lang="en")
         //- pinterest logo
         img(src="https://i.pinimg.com/originals/d3/d1/75/d3d175e560ae133f1ed5cd4ec173751a.png", alt="pin logo", class="img1")
         p.header Make account to see more
+        form(action="/register", method="post")
+          input(type="email", name="email", placeholder="Email", class="detail")
+          br
+          input(type="text", name="username", placeholder="User name", class="detail")
+          br
+          input(type="text", name="fullname", placeholder="Full name", class="detail")
+          br
+          input(type="password", name="password", placeholder="Password", class="detail")
+          input(type="submit", class="btn int", value="Register Account")
+        //- corrected "form" to "/form" to close the form tag
+        a(href="/forgot") Forgot your password?
 
-        input(type="email", name="email", placeholder="Email", class="detail")
-        br
-        input(type="text", name="usernanme" placeholder="User name", class="detail")
-        br
-        input(type="text", name="fullname" placeholder="Full name", class="detail")
-        br
-        input(type="password", placeholder="Password", class="detail")
-
-        h4 Forgot your password?
-
-        button.btn.int Log in
         p.or OR
         button.btn.fbk
           i.fab.fa-facebook.fa-lg(style="color: white; padding-right: 10px")
